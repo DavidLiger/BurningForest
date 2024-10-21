@@ -10,9 +10,9 @@ La simulation s'exécute étape par étape, avec une propagation automatique du 
 
 ## Comment lancer la simulation
 
-1. Placez votre projet dans un dossier
+1. Placez votre projet dans un dossier (par exemple, C:/Users/MoiMeme/Documents/Test_CIRIL_Group).
 2. Ouvrez un terminal (ou cmd sous Windows) et accédez à ce dossier :
-    cd C:/Users/DavidArsene/Documents/DAVID/Emploi/Test_CIRIL_Group
+    cd C:/Users/MoiMeme/Documents/Test_CIRIL_Group
 3. Lancez le serveur PHP intégré :
     php -S localhost:8000
 4. Accédez à votre application depuis un navigateur en allant à l'adresse suivante :
