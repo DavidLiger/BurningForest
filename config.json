@@ -1,0 +1,9 @@
+{
+    "gridHeight": 10,
+    "gridWidth": 10,
+    "initialFires": [
+      {"x": 5, "y": 5}
+    ],
+    "propagationProbability": 0.3
+  }
+  

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulation de Feu de Forêt</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <h1>Simulation de Feu de Forêt</h1>
+    <canvas id="forestCanvas"></canvas>
+    <button id="start-simulation">Lancer la simulation</button>
+
+    <script>
+        let grid = [];
+        let gridHeight = 10; // Hauteur de la grille
+        let gridWidth = 10; // Largeur de la grille
+        let cellSize = 50; // Taille de chaque cellule en pixels
+        let isBurning = true;
+        let canvas, ctx;
+
+        // Initialisation de la grille et du canvas
+        function initializeGrid() {
+            canvas = document.getElementById('forestCanvas');
+            ctx = canvas.getContext('2d');
+            canvas.width = gridWidth * cellSize;  // Largeur du canvas adaptée à la grille
+            canvas.height = gridHeight * cellSize; // Hauteur du canvas adaptée à la grille
+
+            // Initialiser la grille avec des cases "vides"
+            for (let y = 0; y < gridHeight; y++) {
+                let row = [];
+                for (let x = 0; x < gridWidth; x++) {
+                    row.push('empty');
+                }
+                grid.push(row);
+            }
+
+            // Définir les feux initiaux (par exemple, on met le feu à la case (5, 5))
+            setFire(5, 5);
+
+            // Dessiner la grille
+            drawGrid();
+        }
+
+        // Fonction pour mettre le feu à une case
+        function setFire(x, y) {
+            if (grid[y][x] === 'empty') {
+                grid[y][x] = 'burning';
+                drawCell(x, y, 'red');
+            }
+        }
+
+        // Fonction pour éteindre le feu et transformer une case en cendre
+        function extinguishFire(x, y) {
+            if (grid[y][x] === 'burning') {
+                grid[y][x] = 'ash';
+                drawCell(x, y, 'gray');
+            }
+        }
+
+        // Dessiner une cellule spécifique dans la grille
+        function drawCell(x, y, color) {
+            ctx.fillStyle = color;
+            ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+            ctx.strokeRect(x * cellSize, y * cellSize, cellSize, cellSize); // Ajout des bordures
+        }
+
+        // Dessiner la grille complète
+        function drawGrid() {
+            for (let y = 0; y < gridHeight; y++) {
+                for (let x = 0; x < gridWidth; x++) {
+                    if (grid[y][x] === 'empty') {
+                        drawCell(x, y, 'green');
+                    } else if (grid[y][x] === 'burning') {
+                        drawCell(x, y, 'red');
+                    } else if (grid[y][x] === 'ash') {
+                        drawCell(x, y, 'gray');
+                    }
+                }
+            }
+        }
+
+        // Simulation de l'étape suivante
+        function nextStep() {
+            let burningCells = [];
+
+            // Collecter les cases actuellement en feu
+            for (let y = 0; y < gridHeight; y++) {
+                for (let x = 0; x < gridWidth; x++) {
+                    if (grid[y][x] === 'burning') {
+                        burningCells.push({x, y});
+                    }
+                }
+            }
+
+            // Éteindre les feux actuels et propager le feu
+            burningCells.forEach(cell => {
+                extinguishFire(cell.x, cell.y); // La case brûlée devient cendre
+
+                // Propager le feu aux cases adjacentes
+                spreadFire(cell.x + 1, cell.y); // Droite
+                spreadFire(cell.x - 1, cell.y); // Gauche
+                spreadFire(cell.x, cell.y + 1); // Bas
+                spreadFire(cell.x, cell.y - 1); // Haut
+            });
+
+            // Vérifier s'il reste des cases en feu
+            isBurning = burningCells.length > 0;
+
+            if (isBurning) {
+                setTimeout(nextStep, 1000); // Répéter la simulation toutes les secondes
+            }
+        }
+
+        // Propagation du feu (sans probabilité, la propagation est automatique)
+        function spreadFire(x, y) {
+            if (x >= 0 && x < gridWidth && y >= 0 && y < gridHeight) {
+                if (grid[y][x] === 'empty') {
+                    setFire(x, y);
+                }
+            }
+        }
+
+        // Lancer la simulation
+        document.getElementById('start-simulation').addEventListener('click', function() {
+            if (isBurning) {
+                nextStep();
+            }
+        });
+
+        // Initialisation de la grille à l'ouverture de la page
+        initializeGrid();
+    </script>
+</body>
+</html>
