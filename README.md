@@ -1,7 +1,7 @@
 # Simulation de Feu de Forêt
 
 Ce projet simule la propagation d'un feu de forêt sur une grille de taille configurable. Chaque cellule de la grille peut être en feu, en cendre ou vide. 
-La simulation s'exécute étape par étape, avec une propagation automatique du feu aux cellules adjacentes.
+La simulation s'exécute étape par étape, avec une propagation aléatoire du feu aux cellules adjacentes.
 
 ## Fichiers Principaux
 - `burningForest.html` : Fichier HTML principal avec le JavaScript pour la simulation.
